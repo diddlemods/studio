@@ -1,3 +1,4 @@
+
 'use client';
 
 import type React from 'react';
@@ -12,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { LineChart, PackagePlus, Coins, TrendingUp, TrendingDown, Info } from 'lucide-react';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
 
 interface MarketItem {
   id: string;
@@ -34,6 +36,8 @@ interface PlayerListing {
   listedAt: Date;
 }
 
+type PlayerInventoryItem = { id: string; name: string; iconUrl: string; quantity: number };
+
 // Mock Data
 const mockMarketItems: MarketItem[] = [
   { id: 'health_potion_1', name: 'Minor Healing Potion', iconUrl: 'https://placehold.co/40x40.png?text=🧪', currentPrice: 10, priceTrend: 'stable', supply: 150, demand: 200, category: 'Potions' },
@@ -42,25 +46,42 @@ const mockMarketItems: MarketItem[] = [
   { id: 'gem_a', name: 'Mystic Shard', iconUrl: 'https://placehold.co/40x40.png?text=💎', currentPrice: 75, priceTrend: 'up', supply: 20, demand: 50, category: 'Materials' },
 ];
 
-const mockPlayerInventory: { id: string; name: string; iconUrl: string; quantity: number }[] = [
+const mockPlayerInventory: PlayerInventoryItem[] = [
     { id: 'health_potion_1', name: 'Minor Healing Potion', iconUrl: 'https://placehold.co/40x40.png?text=🧪', quantity: 5 },
     { id: 'iron_ore', name: 'Iron Ore', iconUrl: 'https://placehold.co/40x40.png?text=⛏️', quantity: 50 },
 ];
 
+interface SellItemsCardProps {
+  selectedInventoryItemId: string;
+  setSelectedInventoryItemId: React.Dispatch<React.SetStateAction<string>>;
+  listingQuantity: number;
+  setListingQuantity: React.Dispatch<React.SetStateAction<number>>;
+  listingPrice: number;
+  setListingPrice: React.Dispatch<React.SetStateAction<number>>;
+  handleListItem: () => void;
+  playerInventory: PlayerInventoryItem[];
+}
+
 
 const MarketDisplay: React.FC = () => {
+  const { toast } = useToast();
   const [marketItems, setMarketItems] = useState<MarketItem[]>(mockMarketItems);
   const [playerListings, setPlayerListings] = useState<PlayerListing[]>([]);
   const [selectedInventoryItemId, setSelectedInventoryItemId] = useState<string>('');
   const [listingQuantity, setListingQuantity] = useState<number>(1);
   const [listingPrice, setListingPrice] = useState<number>(10);
+  // This state would ideally come from a shared player state/context
+  const [currentMockPlayerInventory, setCurrentMockPlayerInventory] = useState<PlayerInventoryItem[]>(mockPlayerInventory);
+
 
   const handleListItem = () => {
-    const itemToSell = mockPlayerInventory.find(item => item.id === selectedInventoryItemId);
-    if (!itemToSell || listingQuantity <= 0 || listingPrice <= 0) return;
+    const itemToSell = currentMockPlayerInventory.find(item => item.id === selectedInventoryItemId);
+    if (!itemToSell || listingQuantity <= 0 || listingPrice <= 0) {
+       toast({ title: "Invalid Input", description: "Please select an item and ensure quantity/price are valid.", variant: "destructive" });
+      return;
+    }
     if (listingQuantity > itemToSell.quantity) {
-      // Add toast notification here
-      alert("Not enough items in inventory.");
+      toast({ title: "Insufficient Quantity", description: `Not enough ${itemToSell.name} in inventory. You have ${itemToSell.quantity}.`, variant: "destructive" });
       return;
     }
 
@@ -74,8 +95,17 @@ const MarketDisplay: React.FC = () => {
       listedAt: new Date(),
     };
     setPlayerListings(prev => [...prev, newListing]);
-    // Here, you'd also update player inventory
-    alert(`Listed ${listingQuantity}x ${itemToSell.name} for ${listingPrice} each.`);
+    
+    // Update player inventory (mock update)
+    setCurrentMockPlayerInventory(prevInv => 
+      prevInv.map(item => 
+        item.id === selectedInventoryItemId 
+          ? {...item, quantity: item.quantity - listingQuantity}
+          : item
+      ).filter(item => item.quantity > 0) // Optionally remove items with 0 quantity
+    );
+
+    toast({ title: "Item Listed!", description: `Listed ${listingQuantity}x ${itemToSell.name} for ${listingPrice} each.` });
     setSelectedInventoryItemId('');
     setListingQuantity(1);
     setListingPrice(10);
@@ -141,8 +171,8 @@ const MarketDisplay: React.FC = () => {
                       <TableCell>{item.supply}</TableCell>
                       <TableCell>{item.demand}</TableCell>
                       <TableCell className="text-right">
-                        <Button variant="outline" size="sm">Buy</Button>
-                        <Button variant="outline" size="sm" className="ml-2">Sell</Button>
+                        <Button variant="outline" size="sm" onClick={() => toast({title: "Action: Buy", description: `Buy ${item.name}`})}>Buy</Button>
+                        <Button variant="outline" size="sm" className="ml-2" onClick={() => toast({title: "Action: Sell", description: `Sell ${item.name}`})}>Sell</Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -192,7 +222,8 @@ const MarketDisplay: React.FC = () => {
                         <TableCell className="text-right">
                           <Button variant="outline" size="sm" onClick={() => {
                             setPlayerListings(prev => prev.filter(l => l.id !== listing.id));
-                            alert("Listing removed.");
+                            // Mock: Add item back to inventory if needed or handle differently
+                            toast({title: "Listing Removed", description: `${listing.itemName} removed from market.`});
                           }}>Remove</Button>
                         </TableCell>
                       </TableRow>
@@ -205,20 +236,33 @@ const MarketDisplay: React.FC = () => {
         </Card>
       </TabsContent>
       
-      <TabsContent value="sellItems" className="md:hidden mt-4"> {/* Show this tab content below for small screens */}
-        <SellItemsCard selectedInventoryItemId={selectedInventoryItemId} setSelectedInventoryItemId={setSelectedInventoryItemId} listingQuantity={listingQuantity} setListingQuantity={setListingQuantity} listingPrice={listingPrice} setListingPrice={setListingPrice} handleListItem={handleListItem} />
+      {/* SellItemsCard for mobile, always rendered inside a TabContent for discoverability */}
+      <TabsContent value="sellItems">
+        <SellItemsCard 
+          selectedInventoryItemId={selectedInventoryItemId} 
+          setSelectedInventoryItemId={setSelectedInventoryItemId} 
+          listingQuantity={listingQuantity} 
+          setListingQuantity={setListingQuantity} 
+          listingPrice={listingPrice} 
+          setListingPrice={setListingPrice} 
+          handleListItem={handleListItem}
+          playerInventory={currentMockPlayerInventory} 
+        />
       </TabsContent>
-
-      {/* Sell Items Card - for larger screens or as a separate component */}
-       <div className="hidden md:block"> {/* This part is only for layout on larger screens if not using the tab */}
-         {/* The SellItemsCard can be rendered here if TabsTrigger for 'sellItems' is not used, or if you want it always visible on large screens */}
-       </div>
     </Tabs>
   );
 };
 
-// Extracted SellItemsCard for reusability if needed, or if layout demands it
-const SellItemsCard = ({selectedInventoryItemId, setSelectedInventoryItemId, listingQuantity, setListingQuantity, listingPrice, setListingPrice, handleListItem}: any) => (
+const SellItemsCard: React.FC<SellItemsCardProps> = ({
+  selectedInventoryItemId, 
+  setSelectedInventoryItemId, 
+  listingQuantity, 
+  setListingQuantity, 
+  listingPrice, 
+  setListingPrice, 
+  handleListItem,
+  playerInventory
+}) => (
  <Card>
     <CardHeader>
       <CardTitle className="font-headline flex items-center gap-2"><PackagePlus /> List Item for Sale</CardTitle>
@@ -232,26 +276,26 @@ const SellItemsCard = ({selectedInventoryItemId, setSelectedInventoryItemId, lis
             <SelectValue placeholder="Select an item from your inventory" />
           </SelectTrigger>
           <SelectContent>
-            {mockPlayerInventory.map(item => (
+            {playerInventory.length > 0 ? playerInventory.map(item => (
               <SelectItem key={item.id} value={item.id}>
                 <div className="flex items-center gap-2">
                   <Image data-ai-hint="item icon" src={item.iconUrl} alt={item.name} width={20} height={20} className="rounded-sm"/>
                   {item.name} (Owned: {item.quantity})
                 </div>
               </SelectItem>
-            ))}
+            )) : <SelectItem value="no-items" disabled>No items in inventory</SelectItem>}
           </SelectContent>
         </Select>
       </div>
       <div>
         <Label htmlFor="quantity">Quantity</Label>
-        <Input id="quantity" type="number" value={listingQuantity} onChange={e => setListingQuantity(Math.max(1, parseInt(e.target.value)))} min="1" />
+        <Input id="quantity" type="number" value={listingQuantity} onChange={e => setListingQuantity(Math.max(1, parseInt(e.target.value) || 1))} min="1" />
       </div>
       <div>
         <Label htmlFor="price">Price per Unit</Label>
-        <Input id="price" type="number" value={listingPrice} onChange={e => setListingPrice(Math.max(1, parseInt(e.target.value)))} min="1" />
+        <Input id="price" type="number" value={listingPrice} onChange={e => setListingPrice(Math.max(1, parseInt(e.target.value) || 1))} min="1" />
       </div>
-      <Button onClick={handleListItem} className="w-full" disabled={!selectedInventoryItemId}>List Item</Button>
+      <Button onClick={handleListItem} className="w-full" disabled={!selectedInventoryItemId || selectedInventoryItemId === "no-items"}>List Item</Button>
     </CardContent>
   </Card>
 );

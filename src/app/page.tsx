@@ -1,7 +1,11 @@
+
+'use client';
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Swords, Trees, Network, FlaskConical, Coins, Settings2 } from "lucide-react";
+import { useState, useEffect } from 'react';
 
 const features = [
   {
@@ -45,6 +49,12 @@ const features = [
 ];
 
 export default function HomePage() {
+  const [currentYear, setCurrentYear] = useState<number | null>(null);
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
+
   return (
     <div className="container mx-auto py-8 px-4">
       <header className="text-center mb-12">
@@ -83,7 +93,7 @@ export default function HomePage() {
       </div>
 
       <footer className="text-center mt-16 py-8 border-t border-border">
-        <p className="text-muted-foreground">Mimir's Echo &copy; {new Date().getFullYear()}</p>
+        <p className="text-muted-foreground">Mimir's Echo &copy; {currentYear !== null ? currentYear : 'Loading...'}</p>
       </footer>
     </div>
   );

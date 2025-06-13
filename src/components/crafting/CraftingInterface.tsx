@@ -1,3 +1,4 @@
+
 'use client';
 
 import type React from 'react';
@@ -12,6 +13,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Wand2, CheckCircle, XCircle, ShoppingCart, FlaskConical } from 'lucide-react';
 import Image from 'next/image';
+import { useToast } from '@/hooks/use-toast';
 
 interface Material {
   id: string;
@@ -70,6 +72,7 @@ const mockRecipes: Recipe[] = [
 ];
 
 const CraftingInterface: React.FC = () => {
+  const { toast } = useToast();
   const [materials, setMaterials] = useState<Material[]>(mockMaterials);
   const [recipes] = useState<Recipe[]>(mockRecipes);
   const [selectedRecipeId, setSelectedRecipeId] = useState<string | null>(null);
@@ -88,7 +91,13 @@ const CraftingInterface: React.FC = () => {
 
   const handleCraft = () => {
     if (!selectedRecipe || !canCraft) {
-      setCraftingStatus({ type: 'error', message: 'Cannot craft item. Check materials.' });
+      const message = !selectedRecipe ? 'Please select a recipe first.' : 'Not enough materials to craft this item.';
+      toast({
+        title: 'Crafting Failed',
+        description: message,
+        variant: 'destructive',
+      });
+      setCraftingStatus({ type: 'error', message: 'Cannot craft item. Check materials or recipe selection.' });
       return;
     }
 
@@ -100,9 +109,15 @@ const CraftingInterface: React.FC = () => {
       );
     });
     setMaterials(updatedMaterials);
-    setCraftingStatus({ type: 'success', message: `Successfully crafted ${selectedRecipe.result.quantity}x ${selectedRecipe.result.name}!` });
     
-    // Clear status after a few seconds
+    const successMessage = `Successfully crafted ${selectedRecipe.result.quantity}x ${selectedRecipe.result.name}!`;
+    toast({
+      title: 'Crafting Successful!',
+      description: successMessage,
+    });
+    setCraftingStatus({ type: 'success', message: successMessage });
+    
+    // Clear visual status alert after a few seconds, toast handles its own dismissal
     setTimeout(() => setCraftingStatus(null), 3000);
   };
 
@@ -204,7 +219,7 @@ const CraftingInterface: React.FC = () => {
                 </Alert>
               )}
 
-              <Button onClick={handleCraft} disabled={!canCraft || !selectedRecipe} className="w-full">
+              <Button onClick={handleCraft} disabled={!selectedRecipe || !canCraft} className="w-full">
                 <Wand2 className="mr-2 h-4 w-4" /> Craft {selectedRecipe.result.quantity}x {selectedRecipe.result.name}
               </Button>
             </div>
