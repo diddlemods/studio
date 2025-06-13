@@ -72,7 +72,7 @@ export default function HomePage() {
               </CardDescription>
             </CardContent>
             <div className="p-6 pt-0">
-              <Link href={feature.href} passHref>
+              <Link href={feature.href}>
                 <Button variant="outline" className="w-full group">
                   Explore <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
