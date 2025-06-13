@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -13,9 +14,7 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/sidebar'; // Removed SidebarTrigger as it's not used here directly.
 import { navItems, type NavItem as NavItemType } from '@/config/nav';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -29,22 +28,20 @@ function NavItem({ item, isActive }: NavItemProps) {
   const IconComponent = item.icon as LucideIcon;
   return (
     <SidebarMenuItem>
-      <Link href={item.href} legacyBehavior passHref>
-        <SidebarMenuButton
-          asChild
-          isActive={isActive}
-          className={cn(
-            "justify-start w-full",
-            isActive && "bg-sidebar-accent text-sidebar-accent-foreground"
-          )}
-          tooltip={{ children: item.label, className:"font-body" }}
-        >
-          <a>
-            <IconComponent size={18} />
-            <span className="font-body">{item.label}</span>
-          </a>
-        </SidebarMenuButton>
-      </Link>
+      <SidebarMenuButton
+        asChild
+        isActive={isActive}
+        className={cn(
+          "justify-start w-full",
+          isActive && "bg-sidebar-accent text-sidebar-accent-foreground"
+        )}
+        tooltip={{ children: item.label, className:"font-body" }}
+      >
+        <Link href={item.href}>
+          <IconComponent size={18} />
+          <span className="font-body">{item.label}</span>
+        </Link>
+      </SidebarMenuButton>
     </SidebarMenuItem>
   );
 }
