@@ -5,3 +5,7 @@
 2025-06-13 07:06:54,434888249 [DefaultActionDispatcher 2] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
 2025-06-13 07:06:54,704422266 [Thread-1] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:33996
 2025-06-13 07:06:54,704799267 [Thread-3] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:51864
+2025-06-13 07:27:15,369543006 [DefaultActionDispatcher 3] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 3
+2025-06-13 07:27:15,370332957 [DefaultActionDispatcher 3] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:27:15,372740909 [Thread-2] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:60726
+2025-06-13 07:31:34,941745697 [Thread-3] INFO  SocketGLSPServerLauncher - Stopping GLSP server connection for client /127.0.0.1:51864

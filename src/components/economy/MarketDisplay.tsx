@@ -40,15 +40,15 @@ type PlayerInventoryItem = { id: string; name: string; iconUrl: string; quantity
 
 // Mock Data
 const mockMarketItems: MarketItem[] = [
-  { id: 'health_potion_1', name: 'Minor Healing Potion', iconUrl: 'https://placehold.co/40x40.png?text=🧪', currentPrice: 10, priceTrend: 'stable', supply: 150, demand: 200, category: 'Potions' },
-  { id: 'iron_sword', name: 'Iron Sword', iconUrl: 'https://placehold.co/40x40.png?text=⚔️', currentPrice: 50, priceTrend: 'up', supply: 30, demand: 45, category: 'Weapons' },
-  { id: 'herb_a', name: 'Sunpetal', iconUrl: 'https://placehold.co/40x40.png?text=🌿', currentPrice: 3, priceTrend: 'down', supply: 500, demand: 300, category: 'Materials' },
-  { id: 'gem_a', name: 'Mystic Shard', iconUrl: 'https://placehold.co/40x40.png?text=💎', currentPrice: 75, priceTrend: 'up', supply: 20, demand: 50, category: 'Materials' },
+  { id: 'health_potion_1', name: 'Minor Healing Potion', iconUrl: 'https://placehold.co/40x40.png', currentPrice: 10, priceTrend: 'stable', supply: 150, demand: 200, category: 'Potions' },
+  { id: 'iron_sword', name: 'Iron Sword', iconUrl: 'https://placehold.co/40x40.png', currentPrice: 50, priceTrend: 'up', supply: 30, demand: 45, category: 'Weapons' },
+  { id: 'herb_a', name: 'Sunpetal', iconUrl: 'https://placehold.co/40x40.png', currentPrice: 3, priceTrend: 'down', supply: 500, demand: 300, category: 'Materials' },
+  { id: 'gem_a', name: 'Mystic Shard', iconUrl: 'https://placehold.co/40x40.png', currentPrice: 75, priceTrend: 'up', supply: 20, demand: 50, category: 'Materials' },
 ];
 
 const mockPlayerInventory: PlayerInventoryItem[] = [
-    { id: 'health_potion_1', name: 'Minor Healing Potion', iconUrl: 'https://placehold.co/40x40.png?text=🧪', quantity: 5 },
-    { id: 'iron_ore', name: 'Iron Ore', iconUrl: 'https://placehold.co/40x40.png?text=⛏️', quantity: 50 },
+    { id: 'health_potion_1', name: 'Minor Healing Potion', iconUrl: 'https://placehold.co/40x40.png', quantity: 5 },
+    { id: 'iron_ore', name: 'Iron Ore', iconUrl: 'https://placehold.co/40x40.png', quantity: 50 },
 ];
 
 interface SellItemsCardProps {
@@ -119,6 +119,13 @@ const MarketDisplay: React.FC = () => {
     return marketItems.filter(item => item.category === filterCategory);
   }, [marketItems, filterCategory]);
 
+  const getItemCategoryHint = (category: string) => {
+    if (category === 'Potions') return 'potion bottle';
+    if (category === 'Weapons') return 'sword weapon';
+    if (category === 'Materials') return 'herb mineral gem';
+    return 'item icon';
+  }
+
   return (
     <Tabs defaultValue="market" className="w-full">
       <TabsList className="grid w-full grid-cols-2 md:grid-cols-3 mb-4">
@@ -159,7 +166,7 @@ const MarketDisplay: React.FC = () => {
                   {filteredMarketItems.map(item => (
                     <TableRow key={item.id}>
                       <TableCell className="font-medium flex items-center gap-2">
-                        <Image data-ai-hint="item icon" src={item.iconUrl} alt={item.name} width={32} height={32} className="rounded-sm"/>
+                        <Image data-ai-hint={getItemCategoryHint(item.category)} src={item.iconUrl} alt={item.name} width={32} height={32} className="rounded-sm"/>
                         {item.name}
                       </TableCell>
                       <TableCell><Coins className="inline mr-1 h-3 w-3 text-yellow-400" />{item.currentPrice}</TableCell>
@@ -302,3 +309,5 @@ const SellItemsCard: React.FC<SellItemsCardProps> = ({
 
 
 export default MarketDisplay;
+
+    

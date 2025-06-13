@@ -35,10 +35,10 @@ interface Recipe {
 
 // Mock Data
 const mockMaterials: Material[] = [
-  { id: 'herb_a', name: 'Sunpetal', iconUrl: 'https://placehold.co/40x40.png?text=🌿', description: 'A common herb that glows faintly.', quantityOwned: 10, },
-  { id: 'herb_b', name: 'Moonbloom', iconUrl: 'https://placehold.co/40x40.png?text=🌙', description: 'A rare herb found only under moonlight.', quantityOwned: 3 },
-  { id: 'ore_a', name: 'Iron Ore', iconUrl: 'https://placehold.co/40x40.png?text=⛏️', description: 'Basic ore for crafting.', quantityOwned: 25 },
-  { id: 'gem_a', name: 'Mystic Shard', iconUrl: 'https://placehold.co/40x40.png?text=💎', description: 'A fragment of concentrated magic.', quantityOwned: 5 },
+  { id: 'herb_a', name: 'Sunpetal', iconUrl: 'https://placehold.co/40x40.png', description: 'A common herb that glows faintly.', quantityOwned: 10, },
+  { id: 'herb_b', name: 'Moonbloom', iconUrl: 'https://placehold.co/40x40.png', description: 'A rare herb found only under moonlight.', quantityOwned: 3 },
+  { id: 'ore_a', name: 'Iron Ore', iconUrl: 'https://placehold.co/40x40.png', description: 'Basic ore for crafting.', quantityOwned: 25 },
+  { id: 'gem_a', name: 'Mystic Shard', iconUrl: 'https://placehold.co/40x40.png', description: 'A fragment of concentrated magic.', quantityOwned: 5 },
 ];
 
 const mockRecipes: Recipe[] = [
@@ -46,7 +46,7 @@ const mockRecipes: Recipe[] = [
     id: 'potion_health_minor',
     name: 'Minor Healing Potion',
     description: 'Restores a small amount of health.',
-    iconUrl: 'https://placehold.co/64x64.png?text=🧪',
+    iconUrl: 'https://placehold.co/64x64.png',
     materialsNeeded: [{ materialId: 'herb_a', quantity: 2 }],
     result: { itemId: 'health_potion_1', name: 'Minor Healing Potion', quantity: 1 },
     category: 'Alchemy',
@@ -55,7 +55,7 @@ const mockRecipes: Recipe[] = [
     id: 'potion_mana_minor',
     name: 'Minor Mana Potion',
     description: 'Restores a small amount of mana.',
-    iconUrl: 'https://placehold.co/64x64.png?text=🧪',
+    iconUrl: 'https://placehold.co/64x64.png',
     materialsNeeded: [{ materialId: 'herb_b', quantity: 1 }, { materialId: 'gem_a', quantity: 1 }],
     result: { itemId: 'mana_potion_1', name: 'Minor Mana Potion', quantity: 1 },
     category: 'Alchemy',
@@ -64,7 +64,7 @@ const mockRecipes: Recipe[] = [
     id: 'sword_iron',
     name: 'Iron Sword',
     description: 'A sturdy iron sword.',
-    iconUrl: 'https://placehold.co/64x64.png?text=⚔️',
+    iconUrl: 'https://placehold.co/64x64.png',
     materialsNeeded: [{ materialId: 'ore_a', quantity: 5 }],
     result: { itemId: 'iron_sword', name: 'Iron Sword', quantity: 1 },
     category: 'Blacksmithing',
@@ -154,7 +154,7 @@ const CraftingInterface: React.FC = () => {
                   className="w-full justify-start text-left h-auto py-2"
                   onClick={() => setSelectedRecipeId(recipe.id)}
                 >
-                  <Image data-ai-hint="potion bottle" src={recipe.iconUrl} alt={recipe.name} width={32} height={32} className="mr-2 rounded-sm" />
+                  <Image data-ai-hint={recipe.category === 'Alchemy' ? 'potion bottle' : 'weapon gear'} src={recipe.iconUrl} alt={recipe.name} width={32} height={32} className="mr-2 rounded-sm" />
                   <div>
                     <p className="font-semibold">{recipe.name}</p>
                     <p className="text-xs text-muted-foreground">{recipe.category}</p>
@@ -179,7 +179,7 @@ const CraftingInterface: React.FC = () => {
           {selectedRecipe ? (
             <div className="space-y-6">
               <div className="flex items-center gap-4">
-                <Image data-ai-hint="potion bottle" src={selectedRecipe.iconUrl} alt={selectedRecipe.name} width={64} height={64} className="rounded-md border border-border p-1" />
+                <Image data-ai-hint={selectedRecipe.category === 'Alchemy' ? 'potion bottle' : 'weapon gear'} src={selectedRecipe.iconUrl} alt={selectedRecipe.name} width={64} height={64} className="rounded-md border border-border p-1" />
                 <div>
                   <h3 className="text-2xl font-semibold font-headline text-primary">{selectedRecipe.name}</h3>
                   <p className="text-sm text-muted-foreground">{selectedRecipe.description}</p>
@@ -197,7 +197,7 @@ const CraftingInterface: React.FC = () => {
                     return (
                       <li key={needed.materialId} className="flex items-center justify-between p-2 bg-muted/30 rounded-md">
                         <div className="flex items-center gap-2">
-                          <Image data-ai-hint="herb mineral" src={material?.iconUrl || 'https://placehold.co/32x32.png'} alt={material?.name || ''} width={24} height={24} className="rounded-sm" />
+                          <Image data-ai-hint="herb mineral gem" src={material?.iconUrl || 'https://placehold.co/32x32.png'} alt={material?.name || ''} width={24} height={24} className="rounded-sm" />
                           <span>{material?.name || 'Unknown Material'}</span>
                         </div>
                         <span className={`text-sm font-medium ${hasEnough ? 'text-green-400' : 'text-red-400'}`}>
@@ -242,7 +242,7 @@ const CraftingInterface: React.FC = () => {
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {materials.map(material => (
                 <div key={material.id} className="p-3 border border-border rounded-md bg-card flex flex-col items-center text-center">
-                  <Image data-ai-hint="herb mineral" src={material.iconUrl} alt={material.name} width={40} height={40} className="mb-2 rounded-sm" />
+                  <Image data-ai-hint="herb mineral gem" src={material.iconUrl} alt={material.name} width={40} height={40} className="mb-2 rounded-sm" />
                   <p className="text-sm font-medium">{material.name}</p>
                   <p className="text-xs text-muted-foreground">Owned: {material.quantityOwned}</p>
                 </div>
@@ -256,3 +256,5 @@ const CraftingInterface: React.FC = () => {
 };
 
 export default CraftingInterface;
+
+    
