@@ -14,7 +14,9 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-} from '@/components/ui/sidebar'; // Removed SidebarTrigger as it's not used here directly.
+  useSidebar, // Import useSidebar hook
+} from '@/components/ui/sidebar';
+import { SheetTitle } from '@/components/ui/sheet';
 import { navItems, type NavItem as NavItemType } from '@/config/nav';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -48,6 +50,7 @@ function NavItem({ item, isActive }: NavItemProps) {
 
 export default function AppSidebar() {
   const pathname = usePathname();
+  const { isMobile } = useSidebar(); // Get isMobile state
 
   const isActive = (itemPath: string, matchSegments?: number) => {
     if (itemPath === '/') return pathname === '/';
@@ -62,9 +65,11 @@ export default function AppSidebar() {
   return (
     <Sidebar collapsible="icon" variant="sidebar" side="left">
       <SidebarHeader className="p-4 border-b border-sidebar-border">
-        <Link href="/" className="flex items-center gap-2">
+        <Link href="/" className="flex items-center gap-2" aria-label="Mimir's Echo Home">
           <AppLogo className="h-8 w-auto" />
         </Link>
+        {/* Conditionally render SheetTitle only on mobile */}
+        {isMobile && <SheetTitle className="sr-only">Main Navigation</SheetTitle>}
       </SidebarHeader>
       <SidebarContent className="flex-1 p-0">
         <ScrollArea className="h-full">
