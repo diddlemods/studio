@@ -5,3 +5,14 @@
 2025-06-13 07:27:05,263518932 [DefaultActionDispatcher 1] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
 2025-06-13 07:27:05,696312361 [Thread-3] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:48566
 2025-06-13 07:27:05,705948402 [Thread-1] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:48568
+2025-06-13 07:40:32,076050599 [DefaultActionDispatcher 3] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 3
+2025-06-13 07:40:32,079094540 [DefaultActionDispatcher 3] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:40:32,081739967 [Thread-2] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:43272
+2025-06-13 07:43:24,276732994 [DefaultActionDispatcher 4] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 4
+2025-06-13 07:43:24,278295405 [DefaultActionDispatcher 4] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:43:24,277575128 [Thread-8] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:47660
+2025-06-13 07:44:22,016383093 [DefaultActionDispatcher 5] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 5
+2025-06-13 07:44:22,017256502 [DefaultActionDispatcher 5] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:44:22,018929244 [Thread-10] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:45726
+2025-06-13 07:45:01,663831808 [Thread-3] INFO  SocketGLSPServerLauncher - Stopping GLSP server connection for client /127.0.0.1:48566
+2025-06-13 07:45:01,744807332 [Thread-3] INFO  DefaultGLSPServer - Shutdown GLSP Server org.eclipse.glsp.server.protocol.DefaultGLSPServer@286c5137

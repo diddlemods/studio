@@ -1,0 +1,13 @@
+2025-06-13 07:40:19,890020645 [main] INFO  SocketGLSPServerLauncher - The GLSP server is ready to accept new client requests on port: 40939
+2025-06-13 07:40:24,285224965 [DefaultActionDispatcher 1] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 1
+2025-06-13 07:40:24,287962559 [DefaultActionDispatcher 1] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:40:24,289386309 [DefaultActionDispatcher 2] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 2
+2025-06-13 07:40:24,289855110 [DefaultActionDispatcher 2] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:40:24,481554667 [Thread-3] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:58516
+2025-06-13 07:40:24,482498257 [Thread-1] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:54750
+2025-06-13 07:43:24,649415077 [DefaultActionDispatcher 3] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 3
+2025-06-13 07:43:24,652564673 [DefaultActionDispatcher 3] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:43:24,658879541 [Thread-2] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:51016
+2025-06-13 07:44:21,808876332 [DefaultActionDispatcher 4] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher thread DefaultActionDispatcher 4
+2025-06-13 07:44:21,817791833 [DefaultActionDispatcher 4] INFO  DefaultActionDispatcher - Terminating DefaultActionDispatcher
+2025-06-13 07:44:21,825263812 [Thread-8] INFO  SocketGLSPServerLauncher - Starting GLSP server connection for client /127.0.0.1:54492
